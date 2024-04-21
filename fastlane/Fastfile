@@ -1,0 +1,27 @@
+default_platform(:android)
+
+platform :android do
+
+  desc "Runs static code analysis, including ktlint and detekt"
+  lane :static_code_analysis do
+    gradle(task: "ktlintCheck detekt")
+  end
+
+  desc "Runs all the unit tests"
+  lane :unit_tests do
+    gradle(task: "unitTests")
+  end
+
+  desc "Build app bundle"
+  lane :build_app_bundle do |options|
+     gradle(
+        task: "bundle",
+        build_type: options[:buildType],
+        properties: {
+            "enableComposeStrongSkipping" => options[:enableComposeStrongSkipping],
+            "enableComposeCompilerReports" => options[:enableComposeCompilerReports]
+          }
+     )
+  end
+
+end

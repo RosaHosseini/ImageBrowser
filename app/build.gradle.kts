@@ -7,22 +7,28 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-val apikeyPropertiesFile: File = rootProject.file("apikey.properties")
-val apikeyProperties = Properties()
-if (apikeyPropertiesFile.exists()) {
-    apikeyPropertiesFile.inputStream().use(apikeyProperties::load)
-}
+val apiKeyProperties = loadIntoProjectProperties(filePath = "apikey.properties")
+val versionProperties = loadIntoProjectProperties(filePath = "version.properties")
 
 android {
     namespace = "com.rosahosseini.findr.app"
 
     defaultConfig {
         applicationId = "com.rosahosseini.findr"
+        versionCode = (versionProperties["appVersionCode"] as String?)?.toInt() ?: 1
+        versionName = versionProperties["appVersionName"] as String? ?: "0.0.1"
         buildConfigField(
             "String",
             "FLICKR_API_KEY",
-            apikeyProperties["FLICKR_KEY"] as String? ?: ""
+            apiKeyProperties["FLICKR_KEY"] as String? ?: ""
         )
+    }
+
+    defaultConfig {
+        applicationId = "nl.emesa.actievandedag"
+
+        // uncomment if need to use hilt runner instead for hilt support for instrumentation tests
+        // testInstrumentationRunner = "com.emesa.avdd.library.testing.android.AvddHiltTestRunner"
     }
 
     buildFeatures {
@@ -66,4 +72,14 @@ dependencies {
     implementation(libs.workManagerHilt)
     implementation(libs.hiltAndroid)
     ksp(libs.hiltCompiler)
+}
+
+// Load keys into project properties
+fun loadIntoProjectProperties(filePath: String): Properties {
+    val propertiesFile: File = rootProject.file(filePath)
+    val properties = Properties()
+    if (propertiesFile.exists()) {
+        propertiesFile.inputStream().use(properties::load)
+    }
+    return properties
 }

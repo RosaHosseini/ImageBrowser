@@ -1,0 +1,66 @@
+name: Android CI
+
+on:
+  pull_request:
+    types: [ opened, synchronize ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static_code_analysis:
+    name: Static code analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-job
+
+      - name: Run static code analysis
+        run: bundle exec fastlane static_code_analysis
+
+      - name: Cancel workflow
+        if: failure()
+        uses: andymckay/cancel-action@0.4
+
+  unit_tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-job
+
+      - name: Run unit tests
+        run: bundle exec fastlane unit_tests
+
+      - name: Cancel workflow
+        if: failure()
+        uses: andymckay/cancel-action@0.4
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        build-type: [ "Debug", "Release" ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup-job
+
+      - name: Build
+        uses: ./.github/actions/build-job
+        with:
+          build-type: ${{ matrix.build-type }}
+          enable-compose-strong-skipping: 'true'
+          enable-compose-compiler-reports: 'true'
