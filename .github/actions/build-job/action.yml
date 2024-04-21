@@ -1,0 +1,42 @@
+name: 'Build'
+description: 'Checkout Repo, Build the app'
+inputs:
+  build-type:
+    description: 'Build type'
+    required: false
+    default: 'Release'
+  enable-compose-strong-skipping:
+    description: 'When true, compose strong skipping will be disabled'
+    required: true
+  enable-compose-compiler-reports:
+    description: 'When true, no compose compiler reports will be generated'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build app bundle ${{ inputs.build-type }}
+      env:
+        builtWithCi: "true"
+      shell: bash
+      run: |
+        bundle exec fastlane build_app_bundle \
+          buildType:"${{ inputs.build-type }}" \
+          enableComposeStrongSkipping:"${{ inputs.enable-compose-strong-skipping }}" \
+          enableComposeCompilerReports:"${{ inputs.enable-compose-compiler-reports }}" 
+
+    - name: Upload build outputs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-outputs
+        path: app/build/outputs/bundle
+        retention-days: 14
+
+    - name: Upload reports
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: reports-${{ inputs.build-type }}
+        path: reports
+        retention-days: 14

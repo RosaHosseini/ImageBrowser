@@ -93,7 +93,7 @@ internal class SearchViewModel @Inject internal constructor(
         searchRepository.removeSearchQuery(term)
     }
 
-    private fun saveTermToHistory(term: String) {
+    private suspend fun saveTermToHistory(term: String) {
         viewModelScope.launch {
             if (term.isNotBlank()) searchRepository.saveSearchQuery(term)
         }

@@ -1,0 +1,48 @@
+name: 'Setup'
+description: 'Checkout Repo, Set up JDK, Set up Gradle, Set up Ruby'
+
+inputs:
+  version-java:
+    description: 'Java version to use'
+    required: false
+    default: '19'
+  version-ruby:
+    description: 'Ruby version to use'
+    required: false
+    default: '3.0.0'
+  use-ruby-action:
+    description: 'Whether or not to use setup ruby action'
+    required: false
+    default: 'true'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ inputs.version-java }}
+        distribution: 'zulu'
+
+    - name: Setup gradle
+      uses: gradle/gradle-build-action@v3
+
+    - name: Setup ruby
+      if: ${{ inputs.use-ruby-action == 'true' }}
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ inputs.version-ruby }}
+        bundler-cache: true
+
+    - name: Cache ruby gems
+      if: ${{ inputs.use-ruby-action != 'true' }}
+      uses: actions/cache@v4
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: ${{ runner.os }}-gem-
+
+    - name: Install ruby gems
+      if: ${{ inputs.use-ruby-action != 'true' }}
+      shell: bash
+      run: sh ./.github/shell/install_gems.sh

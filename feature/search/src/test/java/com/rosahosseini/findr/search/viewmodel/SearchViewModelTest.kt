@@ -74,16 +74,23 @@ class SearchViewModelTest {
 
             // then
             viewModel.state.test {
-                awaitItem().photos shouldBeEqualTo PagingState(
-                    status = PagingState.Status.Loading,
-                    pageNumber = 0
+                awaitItem() shouldBeEqualTo SearchContract.State(term=term)
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                   photos = PagingState(
+                       status = PagingState.Status.Loading,
+                       pageNumber = 0
+                   ),
+                    term = term
                 )
-                awaitItem().photos shouldBeEqualTo PagingState(
-                    status = PagingState.Status.Success,
-                    pageNumber = 0,
-                    data = persistentListOf(photo),
-                    exhausted = false,
-                    throwable = null
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    photos = PagingState(
+                        status = PagingState.Status.Success,
+                        pageNumber = 0,
+                        data = persistentListOf(photo),
+                        exhausted = false,
+                        throwable = null
+                    ),
+                    term = term
                 )
                 expectNoEvents()
             }
@@ -112,16 +119,23 @@ class SearchViewModelTest {
 
             // then
             viewModel.state.test {
-                awaitItem().photos shouldBeEqualTo PagingState(
-                    status = PagingState.Status.Loading,
-                    pageNumber = 0
+                awaitItem() shouldBeEqualTo SearchContract.State(term=term)
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    photos = PagingState(
+                        status = PagingState.Status.Loading,
+                        pageNumber = 0
+                    ),
+                    term = term
                 )
-                awaitItem().photos shouldBeEqualTo PagingState(
-                    status = PagingState.Status.Failure,
-                    pageNumber = 0,
-                    data = persistentListOf(),
-                    exhausted = false,
-                    throwable = throwable
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    photos = PagingState(
+                        status = PagingState.Status.Failure,
+                        pageNumber = 0,
+                        data = persistentListOf(),
+                        exhausted = false,
+                        throwable = throwable
+                    ),
+                    term = term
                 )
                 expectNoEvents()
             }
@@ -146,16 +160,25 @@ class SearchViewModelTest {
 
             // then
             viewModel.state.test {
-                awaitItem().photos shouldBeEqualTo PagingState(
-                    status = PagingState.Status.Loading,
-                    pageNumber = 0
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    term = ""
                 )
-                awaitItem().photos shouldBeEqualTo PagingState(
-                    status = PagingState.Status.Success,
-                    pageNumber = 0,
-                    data = persistentListOf(photo),
-                    exhausted = false,
-                    throwable = null
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    photos = PagingState(
+                        status = PagingState.Status.Loading,
+                        pageNumber = 0
+                    ),
+                    term = ""
+                )
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    photos = PagingState(
+                        status = PagingState.Status.Success,
+                        pageNumber = 0,
+                        data = persistentListOf(photo),
+                        exhausted = false,
+                        throwable = null
+                    ),
+                    term = ""
                 )
                 expectNoEvents()
             }
@@ -180,6 +203,7 @@ class SearchViewModelTest {
 
             // then
             viewModel.state.test {
+                awaitItem()
                 awaitItem().photos shouldBeEqualTo PagingState(
                     status = PagingState.Status.Loading,
                     pageNumber = 0
@@ -233,7 +257,12 @@ class SearchViewModelTest {
             viewModel.onIntent(SearchContract.Intent.OnTermChange("term"))
 
             // then
-            viewModel.state.value.suggestions shouldBeEqualTo persistentListOf("term1")
+            viewModel.state.test {
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    suggestions = persistentListOf("term1"),
+                    term = "term"
+                )
+            }
             coVerify(exactly = 1) { searchRepository.getSearchSuggestion("term", any()) }
         }
     }
@@ -252,10 +281,21 @@ class SearchViewModelTest {
 
 
             // whenever
-            viewModel.onIntent(SearchContract.Intent.OnTermChange("term"))
+            viewModel.onIntent(SearchContract.Intent.OnTermChange("term1"))
+
+            viewModel.state.test {
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    term = "term1"
+                )
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    term = "term1",
+                    photos = PagingState(status = PagingState.Status.Success)
+                )
+                expectNoEvents()
+            }
 
             // then
-            coVerify(exactly = 1) { searchRepository.saveSearchQuery("term") }
+            coVerify(exactly = 1) { searchRepository.saveSearchQuery("term1") }
         }
     }
 
@@ -292,6 +332,7 @@ class SearchViewModelTest {
 
             //  whenever
             viewModel.onIntent(SearchContract.Intent.OnTermChange("term"))
+            delay(1000)
             viewModel.onIntent(SearchContract.Intent.OnLoadMore)
 
             // then
@@ -308,36 +349,63 @@ class SearchViewModelTest {
                 )
             }
 
-            viewModel.state.value.photos shouldBeEqualTo PagingState(
-                pageNumber = 1,
-                data = persistentListOf(photo1, photo2),
-                status = PagingState.Status.Success
-            )
-
-            viewModel.state.value.term shouldBeEqualTo "term"
+            viewModel.state.test {
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    photos = PagingState(
+                        pageNumber = 1,
+                        data = persistentListOf(photo1, photo2),
+                        status = PagingState.Status.Success
+                    ),
+                    term = "term"
+                )
+                expectNoEvents()
+            }
         }
     }
 
 
     @Test
-    fun `On OnLoadMore_Intent with failure viewModel should call searchPhotos with current-page and update state`() {
+    fun `On OnRetry_Intent with failure viewModel should call searchPhotos with current-page and update state`() {
         runBlocking {
             // given
+            val throwable = Throwable()
             coEvery {
                 searchRepository.searchPhotos(any(), pageNumber = 0, pageSize = any())
             } returnsMany listOf(
-                Result.failure(Throwable()),
-                Result.success(pagedPhoto(pageNumber = 1, items = listOf(photo)))
+                Result.failure(throwable),
+                Result.success(pagedPhoto(pageNumber = 0, items = listOf(photo)))
             )
 
             coEvery { searchRepository.saveSearchQuery("term") } just runs
 
-
-            //  whenever
+            // whenever
             viewModel.onIntent(SearchContract.Intent.OnTermChange("term"))
-            viewModel.onIntent(SearchContract.Intent.OnLoadMore)
 
             // then
+            viewModel.state.test {
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    term = "term"
+                )
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    photos = PagingState(
+                        pageNumber = 0,
+                        status = PagingState.Status.Failure,
+                        throwable = throwable
+                    ),
+                    term = "term"
+                )
+                viewModel.onIntent(SearchContract.Intent.OnRetry)
+                awaitItem() shouldBeEqualTo SearchContract.State(
+                    photos = PagingState(
+                        pageNumber = 0,
+                        data = persistentListOf(photo),
+                        status = PagingState.Status.Success
+                    ),
+                    term = "term"
+                )
+                expectNoEvents()
+            }
+
             coVerify(exactly = 2) {
                 searchRepository.searchPhotos(
                     query = eq("term"),
@@ -345,14 +413,6 @@ class SearchViewModelTest {
                     pageSize = any()
                 )
             }
-
-            viewModel.state.value.photos shouldBeEqualTo PagingState(
-                pageNumber = 1,
-                data = persistentListOf(photo),
-                status = PagingState.Status.Success
-            )
-
-            viewModel.state.value.term shouldBeEqualTo "term"
         }
     }
 
@@ -362,10 +422,10 @@ class SearchViewModelTest {
         runBlocking {
             // given
             coEvery {
-                searchRepository.searchPhotos(any(), pageNumber = 0, pageSize = any())
+                searchRepository.searchPhotos("term", pageNumber = 0, pageSize = any())
             } returns Result.success(
                 Page(
-                    items = listOf(),
+                    items = listOf(photo),
                     pageNumber = 0,
                     pageSize = 1,
                     hasNext = false
@@ -373,15 +433,19 @@ class SearchViewModelTest {
             )
             coEvery { searchRepository.saveSearchQuery("term") } just runs
 
-            val state = PagingState<Photo>(
+            val state = PagingState(
                 pageNumber = 0,
-                data = persistentListOf(),
+                data = persistentListOf(photo),
                 status = PagingState.Status.Success,
                 exhausted = true
             )
 
             viewModel.onIntent(SearchContract.Intent.OnTermChange("term"))
-            viewModel.state.value.photos shouldBeEqualTo state
+            viewModel.state.test {
+                awaitItem()
+                awaitItem().photos shouldBeEqualTo state
+                expectNoEvents()
+            }
 
             // whenever
             viewModel.onIntent(SearchContract.Intent.OnLoadMore)
