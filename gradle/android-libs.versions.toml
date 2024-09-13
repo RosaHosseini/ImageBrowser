@@ -1,0 +1,4 @@
+[versions]
+compileSdk = "34"
+targetSdk = "34"
+minSdk = "21"

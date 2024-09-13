@@ -9,6 +9,7 @@ appcompat = "1.7.0"
 coil = "2.6.0"
 composeBom = "2024.08.00"
 composeNavigation = "2.7.7"
+composeMultiplatform = "1.6.10"
 coroutines = "1.8.0"
 dataStore = "1.1.1"
 detekt = "1.23.5"
@@ -21,7 +22,7 @@ hiltWork = "1.2.0"
 immutableCollections = "0.3.5"
 junit5 = "5.9.3"
 kluent = "1.72"
-ksp = "2.0.20-1.0.24" # change it with kotlin
+ksp = "2.0.10-1.0.24" # change it with kotlin
 ktlint = "0.48.2"
 ktlintPlugin = "11.6.1"
 lifecycle = "2.8.4"
@@ -29,7 +30,8 @@ material3 = "1.2.1"
 mockk = "1.13.10"
 okhttpBom = "4.11.0"
 retrofit = "2.9.0"
-room = "2.6.1"
+room = "2.7.0-alpha07"
+sqlite = "2.5.0-alpha06"
 timber = "5.0.1"
 turbine = "1.0.0"
 workManager = "2.9.1"
@@ -38,13 +40,17 @@ workManager = "2.9.1"
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin" }
+room = { id = "androidx.room", version.ref = "room" }
 
 [libraries]
 accompanistInsets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanistInsets" }
@@ -64,8 +70,8 @@ dataStore = { group = "androidx.datastore", name = "datastore-preferences-core",
 detektCompose = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detektCompose" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hiltCompiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hiltCore = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
+hiltCompiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hiltNavigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 immutableCollections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutableCollections" }
 lifecycleCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -77,6 +83,9 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofitGsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+sqlite = { group = "androidx.sqlite", name = "sqlite", version.ref = "sqlite" }
+sqliteBundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "sqlite" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 workManagerHilt = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
 workManagerRuntime = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
