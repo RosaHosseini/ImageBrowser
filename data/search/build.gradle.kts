@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":library:coroutine"))
     implementation(libs.coroutinesCore)
     implementation(libs.gson)
-    implementation(libs.retrofit)
+    implementation(libs.ktorCore)
     implementation(libs.hiltAndroid)
     ksp(libs.hiltCompiler)
 

@@ -3,6 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":domain:model"))
+    implementation(projects.domain.model)
     implementation(libs.gson)
+    implementation(libs.hiltCore)
+    implementation(libs.ktorCore)
 }

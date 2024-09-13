@@ -22,17 +22,17 @@ hiltWork = "1.2.0"
 immutableCollections = "0.3.5"
 junit5 = "5.9.3"
 kluent = "1.72"
-ksp = "2.0.10-1.0.24" # change it with kotlin
+ksp = "2.0.20-1.0.24" # change it with kotlin
 ktlint = "0.48.2"
 ktlintPlugin = "11.6.1"
+ktor = "2.3.12"
 lifecycle = "2.8.4"
 material3 = "1.2.1"
 mockk = "1.13.10"
 okhttpBom = "4.11.0"
-retrofit = "2.9.0"
+timber = "5.0.1"
 room = "2.7.0-alpha07"
 sqlite = "2.5.0-alpha06"
-timber = "5.0.1"
 turbine = "1.0.0"
 workManager = "2.9.1"
 
@@ -48,7 +48,7 @@ kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = 
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" } # kotlin = {}
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin" }
 room = { id = "androidx.room", version.ref = "room" }
@@ -74,14 +74,19 @@ hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref 
 hiltCore = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
 hiltCompiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hiltNavigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+ktorCore = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktorOkhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktorDarwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
+ktorContentNegotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktorLogging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktorGson = { group = "io.ktor", name = "ktor-serialization-gson", version.ref = "ktor" }
+ktorAuth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 immutableCollections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutableCollections" }
 lifecycleCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycleViewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp" }
 okhttpBom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttpBom" }
 okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor" }
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofitGsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -99,7 +104,13 @@ testMockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 testTurbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 [bundles]
-
+ktor = [
+    "ktorCore",
+    "ktorContentNegotiation",
+    "ktorAuth",
+    "ktorLogging",
+    "ktorGson",
+]
 testCore = [
     "testMockk",
     "testKluent",

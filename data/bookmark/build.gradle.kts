@@ -14,8 +14,6 @@ dependencies {
     implementation(project(":domain:model"))
     implementation(project(":library:coroutine"))
     implementation(libs.coroutinesAndroid)
-    implementation(libs.gson)
-    implementation(libs.retrofit)
     implementation(libs.hiltAndroid)
     ksp(libs.hiltCompiler)
 

@@ -1,17 +1,20 @@
 package com.rosahosseini.findr.data.network
 
 import com.rosahosseini.findr.model.ApiError
+import com.rosahosseini.findr.remote.extensions.ErrorManager
+import io.ktor.client.plugins.ResponseException
 import javax.inject.Inject
-import retrofit2.HttpException
 
-internal class RemoteErrorManager @Inject constructor() {
+class RemoteErrorManager @Inject constructor() : ErrorManager {
 
-    fun apiError(throwable: Throwable): ApiError {
+    override fun apiError(cause: Throwable): ApiError {
         return ApiError(
-            code = errorCode(throwable),
-            throwable = throwable
+            code = errorCode(cause),
+            throwable = cause
         )
     }
 
-    private fun errorCode(error: Throwable) = (error as? HttpException)?.code()
+    private fun errorCode(cause: Throwable): Int? {
+        return (cause as? ResponseException)?.response?.status?.value
+    }
 }
