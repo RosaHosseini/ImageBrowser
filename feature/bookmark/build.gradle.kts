@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.composeCompiler)
 }
 
@@ -14,22 +13,22 @@ android {
 }
 
 dependencies {
-    implementation(project(":library:coroutine"))
-    implementation(project(":library:arch"))
-    implementation(project(":library:ui"))
-    implementation(project(":domain:model"))
-    implementation(project(":domain:bookmark"))
+    implementation(projects.library.coroutine)
+    implementation(projects.library.arch)
+    implementation(projects.library.ui)
+    implementation(projects.domain.model)
+    implementation(projects.domain.bookmark)
+
     implementation(platform(libs.composeBom))
     implementation(libs.composeRuntime)
     implementation(libs.immutableCollections)
     implementation(libs.composeMaterial3)
-    implementation(libs.hiltNavigationCompose)
     implementation(libs.composeNavigation)
     implementation(libs.composeTooling)
     implementation(libs.lifecycleViewModel)
     implementation(libs.lifecycleCompose)
-    implementation(libs.hiltAndroid)
-    ksp(libs.hiltCompiler)
+    implementation(platform(libs.koinBom))
+    implementation(libs.koinComposeViewmodel)
 
     testImplementation(libs.bundles.testCore)
 }

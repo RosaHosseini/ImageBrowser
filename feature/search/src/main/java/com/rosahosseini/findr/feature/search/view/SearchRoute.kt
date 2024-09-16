@@ -2,12 +2,12 @@ package com.rosahosseini.findr.feature.search.view
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rosahosseini.findr.feature.bookmark.viewmodel.BookmarkContract.Intent as BookmarkIntent
 import com.rosahosseini.findr.feature.bookmark.viewmodel.BookmarkViewModel
 import com.rosahosseini.findr.feature.search.viewmodel.SearchContract.Intent as SearchIntent
 import com.rosahosseini.findr.feature.search.viewmodel.SearchViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun SearchRoute(
@@ -17,8 +17,8 @@ internal fun SearchRoute(
         description: String?
     ) -> Unit,
     navigateToBookmarks: () -> Unit,
-    searchViewModel: SearchViewModel = hiltViewModel(),
-    bookmarkViewModel: BookmarkViewModel = hiltViewModel()
+    searchViewModel: SearchViewModel = koinViewModel(),
+    bookmarkViewModel: BookmarkViewModel = koinViewModel()
 ) {
     val searchState by searchViewModel.state.collectAsStateWithLifecycle()
     val bookmarkState by bookmarkViewModel.state.collectAsStateWithLifecycle()

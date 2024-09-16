@@ -1,16 +1,16 @@
 package com.rosahosseini.findr.startup
 
 import android.app.Application
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-open class StartupApplication : Application() {
+open class StartupApplication : Application(), KoinComponent {
 
-    @Inject
-    @StartupTaskKey
-    lateinit var startupTasks: @JvmSuppressWildcards Set<RunnableTask>
+    private val startupTasks by inject<Set<StartupTask>>()
+    private var isStartupTasksReleased = false
 
     override fun onCreate() {
         super.onCreate()
@@ -18,15 +18,12 @@ open class StartupApplication : Application() {
     }
 
     private fun runStartupTasks() {
+        if (isStartupTasksReleased) return
         startupTasks.forEach { taskEntry ->
             MainScope().launch(Dispatchers.Default) {
                 taskEntry.run()
             }
         }
-        clearStartupTasks()
-    }
-
-    private fun clearStartupTasks() {
-        startupTasks = emptySet()
+        isStartupTasksReleased = true
     }
 }

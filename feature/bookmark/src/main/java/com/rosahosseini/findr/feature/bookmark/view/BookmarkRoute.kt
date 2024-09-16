@@ -2,10 +2,10 @@ package com.rosahosseini.findr.feature.bookmark.view
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rosahosseini.findr.feature.bookmark.viewmodel.BookmarkContract.Intent
 import com.rosahosseini.findr.feature.bookmark.viewmodel.BookmarkViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun BookmarkRoute(
@@ -15,7 +15,7 @@ internal fun BookmarkRoute(
         description: String?
     ) -> Unit,
     onBackPressed: () -> Unit,
-    bookmarkViewModel: BookmarkViewModel = hiltViewModel()
+    bookmarkViewModel: BookmarkViewModel = koinViewModel()
 ) {
     val state by bookmarkViewModel.state.collectAsStateWithLifecycle()
     BookmarkScreen(

@@ -1,8 +1,8 @@
 package com.rosahosseini.findr.feature.search.viewmodel
 
+import androidx.compose.runtime.Immutable
 import com.rosahosseini.findr.model.Photo
 import com.rosahosseini.findr.ui.state.PagingState
-import javax.annotation.concurrent.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

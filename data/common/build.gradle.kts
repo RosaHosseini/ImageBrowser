@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation(projects.domain.model)
     implementation(libs.gson)
-    implementation(libs.hiltCore)
     implementation(libs.ktorCore)
+    implementation(platform(libs.koinBom))
+    api(libs.koinCore)
 }

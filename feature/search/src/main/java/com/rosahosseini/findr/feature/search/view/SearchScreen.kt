@@ -2,7 +2,6 @@ package com.rosahosseini.findr.feature.search.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -14,10 +13,9 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -26,8 +24,7 @@ import com.rosahosseini.findr.feature.search.view.preview.SearchScreenPreviewPro
 import com.rosahosseini.findr.feature.search.viewmodel.SearchContract
 import com.rosahosseini.findr.model.Photo
 import com.rosahosseini.findr.ui.component.PhotoCard
-import com.rosahosseini.findr.ui.component.pullrefresh.PullRefreshIndicator
-import com.rosahosseini.findr.ui.component.pullrefresh.rememberPullToRefreshState
+import com.rosahosseini.findr.ui.component.pullrefresh.PullToRefreshBox
 import com.rosahosseini.findr.ui.component.state.ErrorComponent
 import com.rosahosseini.findr.ui.component.state.LoadingComponent
 import com.rosahosseini.findr.ui.extensions.OnBottomReached
@@ -52,13 +49,14 @@ internal fun SearchScreen(
     onRetry: () -> Unit,
     isBookmarked: (photoId: String) -> Boolean
 ) {
-    val pullToRefreshState = rememberPullToRefreshState(
-        refreshing = searchState.photos.refreshing,
-        onRefresh = onRefresh,
-        enabled = searchState.photos.canRefresh
-    )
     val gridState = rememberLazyGridState()
-    Box(modifier = Modifier.nestedScroll(pullToRefreshState.nestedScrollConnection)) {
+    val pullToRefreshState = rememberPullToRefreshState()
+    PullToRefreshBox(
+        isRefreshing = searchState.photos.refreshing,
+        onRefresh = onRefresh,
+        state = pullToRefreshState,
+        modifier = Modifier
+    ) {
         Scaffold(
             topBar = {
                 SearchTopAppBar(
@@ -97,10 +95,6 @@ internal fun SearchScreen(
                 }
             }
         }
-        PullRefreshIndicator(
-            state = pullToRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
-        )
     }
 
     gridState.OnBottomReached(buffer = 2) {

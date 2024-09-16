@@ -9,10 +9,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain:model"))
+    implementation(projects.domain.model)
+
     implementation(libs.roomKtx)
     ksp(libs.roomCompiler)
-    implementation(libs.hiltAndroid)
-    ksp(libs.hiltCompiler)
+    implementation(platform(libs.koinBom))
+    api(libs.koinAndroid)
     testImplementation(libs.bundles.testCore)
 }

@@ -1,17 +1,17 @@
 package com.rosahosseini.findr.data.search.di
 
+import com.rosahosseini.findr.data.search.local.SearchHistoryLocalDataSource
+import com.rosahosseini.findr.data.search.remote.datasource.PhotoRemoteDataSource
 import com.rosahosseini.findr.data.search.repository.DefaultSearchRepository
+import com.rosahosseini.findr.di.flickerUrlQualifier
 import com.rosahosseini.findr.domain.search.SearchRepository
-import dagger.Binds
-import dagger.Module
-import dagger.Reusable
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal interface RepositoryModule {
-    @Binds
-    @Reusable
-    fun bindSearchRepository(repo: DefaultSearchRepository): SearchRepository
+val searchDataModule = module {
+    factoryOf(::DefaultSearchRepository) bind SearchRepository::class
+    singleOf(::SearchHistoryLocalDataSource)
+    factory { PhotoRemoteDataSource(get(), get(flickerUrlQualifier), get()) }
 }

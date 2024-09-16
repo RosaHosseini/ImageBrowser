@@ -1,18 +1,18 @@
 package com.rosahosseini.findr.app
 
-import androidx.hilt.work.HiltWorkerFactory
-import androidx.work.Configuration
+import com.rosahosseini.findr.app.di.initKoin
 import com.rosahosseini.findr.startup.StartupApplication
-import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.workmanager.koin.workManagerFactory
+import org.koin.core.component.KoinComponent
 
-@HiltAndroidApp
-class FindrApp : StartupApplication(), Configuration.Provider {
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
+class FindrApp : StartupApplication(), KoinComponent {
 
-    override val workManagerConfiguration: Configuration
-        get() = Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
+    override fun onCreate() {
+        initKoin {
+            androidContext(this@FindrApp)
+            workManagerFactory()
+        }
+        super.onCreate()
+    }
 }

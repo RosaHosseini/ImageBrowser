@@ -7,12 +7,11 @@ import com.rosahosseini.findr.db.entity.toPhotoEntity
 import com.rosahosseini.findr.domain.bookmark.BookmarkRepository
 import com.rosahosseini.findr.library.coroutines.CoroutineDispatchers
 import com.rosahosseini.findr.model.Photo
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
-internal class DefaultBookmarkRepository @Inject constructor(
+internal class DefaultBookmarkRepository(
     private val bookmarkLocalDataSource: BookmarkLocalDataSource,
     private val coroutineDispatchers: CoroutineDispatchers
 ) : BookmarkRepository {

@@ -10,8 +10,6 @@ import com.rosahosseini.findr.ui.state.onFailure
 import com.rosahosseini.findr.ui.state.onLoading
 import com.rosahosseini.findr.ui.state.onRefresh
 import com.rosahosseini.findr.ui.state.onSuccess
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,8 +30,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-@HiltViewModel
-internal class SearchViewModel @Inject internal constructor(
+internal class SearchViewModel internal constructor(
     private val searchRepository: SearchRepository
 ) : MviViewModel<SearchContract.Intent, SearchContract.State>, ViewModel() {
 

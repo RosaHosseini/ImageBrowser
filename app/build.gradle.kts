@@ -3,8 +3,6 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.composeCompiler)
 }
 
@@ -27,9 +25,6 @@ android {
 
     defaultConfig {
         applicationId = "nl.emesa.actievandedag"
-
-        // uncomment if need to use hilt runner instead for hilt support for instrumentation tests
-        // testInstrumentationRunner = "com.emesa.avdd.library.testing.android.AvddHiltTestRunner"
     }
 
     buildFeatures {
@@ -51,24 +46,26 @@ android {
 }
 
 dependencies {
-    implementation(project(":library:ui"))
-    implementation(project(":library:startup"))
-    implementation(project(":data:network"))
-    implementation(project(":data:search"))
-    implementation(project(":data:bookmark"))
-    implementation(project(":domain:model"))
-    implementation(project(":feature:search"))
-    implementation(project(":feature:bookmark"))
-    implementation(project(":feature:photodetail"))
+    implementation(projects.library.ui)
+    implementation(projects.library.startup)
+    implementation(projects.library.coroutine)
+    implementation(projects.data.network)
+    implementation(projects.data.db)
+    implementation(projects.data.search)
+    implementation(projects.data.bookmark)
+    implementation(projects.domain.model)
+    implementation(projects.feature.search)
+    implementation(projects.feature.bookmark)
+    implementation(projects.feature.photodetail)
     implementation(libs.appcompat)
     implementation(platform(libs.composeBom))
-    implementation(libs.hiltNavigationCompose)
     implementation(libs.composeActivity)
+    implementation(libs.composeNavigation)
     implementation(libs.composeMaterial3)
     implementation(libs.accompanistInsets)
-    implementation(libs.workManagerHilt)
-    implementation(libs.hiltAndroid)
-    ksp(libs.hiltCompiler)
+    implementation(platform(libs.koinBom))
+    api(libs.koinAndroid)
+    api(libs.koinWorkManager)
 }
 
 // Load keys into project properties

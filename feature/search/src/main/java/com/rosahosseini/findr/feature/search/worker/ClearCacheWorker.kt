@@ -1,19 +1,18 @@
 package com.rosahosseini.findr.feature.search.worker
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.rosahosseini.findr.domain.search.SearchRepository
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-@HiltWorker
-internal class ClearCacheWorker @AssistedInject constructor(
-    private val searchRepository: SearchRepository,
-    @Assisted context: Context,
-    @Assisted params: WorkerParameters
-) : CoroutineWorker(context, params) {
+internal class ClearCacheWorker(
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params), KoinComponent {
+
+    private val searchRepository by inject<SearchRepository>()
 
     override suspend fun doWork(): Result {
         return try {

@@ -3,10 +3,9 @@ package com.rosahosseini.findr.data.search.local
 import com.rosahosseini.findr.db.dao.SearchHistoryDao
 import com.rosahosseini.findr.db.entity.SearchHistoryEntity
 import com.rosahosseini.findr.extensions.getCurrentTimeMillis
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
-internal class SearchHistoryLocalDataSource @Inject constructor(
+internal class SearchHistoryLocalDataSource(
     private val searchHistoryDao: SearchHistoryDao
 ) {
     suspend fun saveQuery(query: String) {

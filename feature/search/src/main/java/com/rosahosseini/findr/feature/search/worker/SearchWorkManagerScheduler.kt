@@ -7,15 +7,13 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.rosahosseini.findr.library.coroutines.CoroutineDispatchers
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class SearchWorkManagerScheduler @Inject constructor(
-    @ApplicationContext private val context: Context,
+class SearchWorkManagerScheduler(
+    private val context: Context,
     private val coroutineDispatchers: CoroutineDispatchers
 ) {
 

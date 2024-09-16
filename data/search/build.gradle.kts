@@ -9,16 +9,17 @@ android {
 }
 
 dependencies {
-    implementation(project(":data:common"))
-    implementation(project(":data:db"))
-    implementation(project(":domain:search"))
-    implementation(project(":domain:model"))
-    implementation(project(":library:coroutine"))
+    implementation(projects.data.common)
+    implementation(projects.data.db)
+    implementation(projects.domain.search)
+    implementation(projects.domain.model)
+    implementation(projects.library.coroutine)
+
     implementation(libs.coroutinesCore)
     implementation(libs.gson)
     implementation(libs.ktorCore)
-    implementation(libs.hiltAndroid)
-    ksp(libs.hiltCompiler)
+    implementation(platform(libs.koinBom))
+    api(libs.koinCore)
 
     testImplementation(libs.bundles.testCore)
 }

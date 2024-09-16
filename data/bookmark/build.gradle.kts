@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.ksp)
 }
 
 android {
@@ -9,13 +8,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":data:db"))
-    implementation(project(":domain:bookmark"))
-    implementation(project(":domain:model"))
-    implementation(project(":library:coroutine"))
-    implementation(libs.coroutinesAndroid)
-    implementation(libs.hiltAndroid)
-    ksp(libs.hiltCompiler)
+    implementation(projects.data.db)
+    implementation(projects.domain.bookmark)
+    implementation(projects.domain.model)
+    implementation(projects.library.coroutine)
 
+    implementation(libs.coroutinesAndroid)
+    implementation(platform(libs.koinBom))
+    api(libs.koinCore)
     testImplementation(libs.bundles.testCore)
 }

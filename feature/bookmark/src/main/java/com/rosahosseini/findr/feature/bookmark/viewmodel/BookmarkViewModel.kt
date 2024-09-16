@@ -6,8 +6,6 @@ import com.rosahosseini.findr.domain.bookmark.BookmarkRepository
 import com.rosahosseini.findr.library.arch.MviViewModel
 import com.rosahosseini.findr.model.Photo
 import com.rosahosseini.findr.ui.state.UiState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,8 +20,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@HiltViewModel
-class BookmarkViewModel @Inject constructor(
+class BookmarkViewModel(
     private val bookmarkRepository: BookmarkRepository
 ) : ViewModel(), MviViewModel<BookmarkContract.Intent, BookmarkContract.State> {
 

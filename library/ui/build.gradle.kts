@@ -13,7 +13,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain:model"))
+    implementation(projects.domain.model)
+
     implementation(platform(libs.composeBom))
     implementation(libs.composeMaterial3)
     implementation(libs.composeNavigation)

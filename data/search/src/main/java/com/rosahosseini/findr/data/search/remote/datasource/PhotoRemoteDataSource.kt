@@ -3,18 +3,16 @@ package com.rosahosseini.findr.data.search.remote.datasource
 import com.rosahosseini.findr.data.search.remote.response.SearchPhotosDto
 import com.rosahosseini.findr.data.search.remote.response.SearchResponseDto
 import com.rosahosseini.findr.model.BuildConfiguration
-import com.rosahosseini.findr.remote.di.FlickrUrl
 import com.rosahosseini.findr.remote.extensions.catchResult
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import javax.inject.Inject
 
-internal class PhotoRemoteDataSource @Inject constructor(
+internal class PhotoRemoteDataSource(
     private val httpClient: HttpClient,
-    @FlickrUrl private val flickrUrl: String,
+    private val baseUrl: String,
     buildConfiguration: BuildConfiguration
 ) {
     private val apiKey = buildConfiguration.flickerApiKey

@@ -9,13 +9,12 @@ import com.rosahosseini.findr.domain.search.SearchRepository
 import com.rosahosseini.findr.library.coroutines.CoroutineDispatchers
 import com.rosahosseini.findr.model.Page
 import com.rosahosseini.findr.model.Photo
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-internal class DefaultSearchRepository @Inject constructor(
+internal class DefaultSearchRepository(
     private val photosRemoteDataSource: PhotoRemoteDataSource,
     private val searchHistoryLocalDataSource: SearchHistoryLocalDataSource,
     private val coroutineDispatchers: CoroutineDispatchers

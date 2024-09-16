@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":domain:model"))
+    implementation(projects.domain.model)
     implementation(libs.coroutinesCore)
 }

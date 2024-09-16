@@ -13,9 +13,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":library:coroutine"))
-    implementation(project(":library:ui"))
-    implementation(project(":domain:model"))
+    implementation(projects.library.coroutine)
+    implementation(projects.library.ui)
+    implementation(projects.domain.model)
+
     implementation(platform(libs.composeBom))
     implementation(libs.lifecycleCompose)
     implementation(libs.composeTooling)

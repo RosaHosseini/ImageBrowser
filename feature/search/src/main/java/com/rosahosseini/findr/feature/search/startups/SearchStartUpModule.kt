@@ -1,24 +1,16 @@
 package com.rosahosseini.findr.feature.search.startups
 
 import com.rosahosseini.findr.feature.search.worker.SearchWorkManagerScheduler
-import com.rosahosseini.findr.startup.RunnableTask
-import com.rosahosseini.findr.startup.StartupTaskKey
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoSet
+import com.rosahosseini.findr.startup.StartupTask
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-object SearchStartUpModule {
+val startUpModule = module {
 
-    @Provides
-    @IntoSet
-    @StartupTaskKey
-    fun provideCacheRecycler(
-        searchWorkManagerScheduler: SearchWorkManagerScheduler
-    ) = RunnableTask {
-        searchWorkManagerScheduler.scheduleClearCachePeriodically()
+    factoryOf(::SearchWorkManagerScheduler)
+    factory {
+        StartupTask {
+            get<SearchWorkManagerScheduler>().scheduleClearCachePeriodically()
+        }
     }
 }
