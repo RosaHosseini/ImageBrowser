@@ -23,18 +23,19 @@ internal class PhotoRemoteDataSource(
         page: Int = 0
     ): Result<SearchPhotosDto> {
         return catchResult<SearchResponseDto> {
-            httpClient.get(flickrUrl) {
-                parameter("method", "flickr.photos.search")
-                parameter("nojsoncallback", "1")
-                parameter("format", "json")
-                parameter("api_key", apiKey)
-                text?.let { parameter("text", it) }
-                parameter("page", page + 1)
-                parameter("per_page", limit)
-                parameter("extras", URLS)
+            httpClient
+                .get(baseUrl) {
+                    parameter("method", "flickr.photos.search")
+                    parameter("nojsoncallback", "1")
+                    parameter("format", "json")
+                    parameter("api_key", apiKey)
+                    text?.let { parameter("text", it) }
+                    parameter("page", page + 1)
+                    parameter("per_page", limit)
+                    parameter("extras", URLS)
 
-                contentType(ContentType.Application.Json)
-            }
+                    contentType(ContentType.Application.Json)
+                }
         }.map { it.getOrThrow() }
     }
 
@@ -43,17 +44,18 @@ internal class PhotoRemoteDataSource(
         page: Int = 0
     ): Result<SearchPhotosDto> {
         return catchResult<SearchResponseDto> {
-            httpClient.get(flickrUrl) {
-                parameter("method", "flickr.photos.getRecent")
-                parameter("nojsoncallback", "1")
-                parameter("format", "json")
-                parameter("api_key", apiKey)
-                parameter("page", page + 1)
-                parameter("per_page", limit)
-                parameter("extras", URLS)
+            httpClient
+                .get(baseUrl) {
+                    parameter("method", "flickr.photos.getRecent")
+                    parameter("nojsoncallback", "1")
+                    parameter("format", "json")
+                    parameter("api_key", apiKey)
+                    parameter("page", page + 1)
+                    parameter("per_page", limit)
+                    parameter("extras", URLS)
 
-                contentType(ContentType.Application.Json)
-            }
+                    contentType(ContentType.Application.Json)
+                }
         }.mapCatching { it.getOrThrow() }
     }
 

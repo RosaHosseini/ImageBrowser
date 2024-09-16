@@ -23,22 +23,18 @@ suspend inline fun <reified T> HttpResponse.toResult(): Result<T> {
     return if (code in 200..299) {
         Result.success(this.body<T>())
     } else {
-        Result.failure(
-            ApiError(
-                code = code,
-                throwable = ResponseException(this, "")
-            )
-        )
+        Result.failure(ApiError(code = code, throwable = this.toResponseException()))
     }
 }
 
 suspend inline fun <reified T> catchResult(
     request: () -> HttpResponse
 ): Result<T> {
-    return runCatching {
-        request()
-    }.fold(
-        onSuccess = { it.toResult() },
-        onFailure = { Result.failure(it) }
-    )
+    return try {
+        request().toResult<T>()
+    } catch (e: ApiError) {
+        // check if throwable is not from coroutine cancellation
+        coroutineContext.ensureActive()
+        Result.failure(e)
+    }
 }

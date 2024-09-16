@@ -7,6 +7,7 @@ import io.ktor.client.plugins.ResponseException
 class RemoteErrorManager : ErrorManager {
 
     override fun apiError(cause: Throwable): ApiError {
+        if (cause is ApiError) return cause
         return ApiError(
             code = errorCode(cause),
             throwable = cause
