@@ -7,5 +7,5 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.ktorCore)
     implementation(platform(libs.koinBom))
-    api(libs.koinCore)
+    implementation(libs.koinCore)
 }

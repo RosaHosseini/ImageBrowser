@@ -15,6 +15,6 @@ dependencies {
 
     implementation(libs.coroutinesAndroid)
     implementation(platform(libs.koinBom))
-    api(libs.koinCore)
+    implementation(libs.koinCore)
     testImplementation(libs.bundles.testCore)
 }

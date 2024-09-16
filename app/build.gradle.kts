@@ -64,8 +64,8 @@ dependencies {
     implementation(libs.composeMaterial3)
     implementation(libs.accompanistInsets)
     implementation(platform(libs.koinBom))
-    api(libs.koinAndroid)
-    api(libs.koinWorkManager)
+    implementation(libs.koinAndroid)
+    implementation(libs.koinWorkManager)
 }
 
 // Load keys into project properties

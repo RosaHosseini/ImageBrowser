@@ -14,6 +14,6 @@ dependencies {
     implementation(libs.roomKtx)
     ksp(libs.roomCompiler)
     implementation(platform(libs.koinBom))
-    api(libs.koinAndroid)
+    implementation(libs.koinAndroid)
     testImplementation(libs.bundles.testCore)
 }
