@@ -4,7 +4,6 @@ An image browser supporting
  - Bookmarks
  - Photo detail
  - Search history
- - Offline first: It caches searched photos
  - Recycle outdated cached data (created 7 days ago) every day 
  
  <p float="center">
